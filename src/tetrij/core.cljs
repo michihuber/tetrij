@@ -216,10 +216,11 @@
     [:div#next-tile (rendered-board view)]))
 
 (defn stats-view []
-  [:div
-   [:div.stats (:level @game)]
-   [:div.stats (:lines @game)]
-   [:div.stats (:score @game)]])
+  (let [{:keys [level lines score]} @game]
+    [:div
+     [:div.stats level]
+     [:div.stats lines]
+     [:div.stats score]]))
 
 (render-to game-view      "main")
 (render-to stats-view     "sidebar-stats")

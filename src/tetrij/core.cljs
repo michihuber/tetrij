@@ -135,12 +135,14 @@
 (go-loop []
   (let [key-code (.-keyCode (<! user-chan))
         event (case key-code
-                37 :move-left ;; left arrow
-                38 :rotate-cw ;; up arrow
+                37 :move-left  ;; left arrow
                 39 :move-right ;; right arrow
-                40 :move-down ;; down arrow
-                32 :drop-tile ;; space
-                80 (do (>! pause-chan :pause)
+                69 :rotate-ccw ;; e
+                82 :rotate-cw  ;; r
+                38 :rotate-cw  ;; up arrow
+                40 :move-down  ;; down arrow
+                32 :drop-tile  ;; space
+                80 (do (>! pause-chan :pause) ;; p
                        nil)
                 nil)]
     (if event (>! event-chan event))
@@ -162,7 +164,8 @@
       :move-left  (swap! game merge (move-left @game))
       :move-right (swap! game merge (move-right @game))
       :move-down  (swap! game merge (move-down @game))
-      :rotate-cw  (swap! game merge (rotate-cw @game)))
+      :rotate-cw  (swap! game merge (rotate-cw @game))
+      :rotate-ccw (swap! game merge (rotate-ccw @game)))
     (let [{:keys [board level]} @game
           full-row-count (count (filter full-row? board))]
       (when-not (zero? full-row-count)
@@ -225,4 +228,3 @@
 (render-to game-view      "main")
 (render-to stats-view     "sidebar-stats")
 (render-to next-tile-view "sidebar-next-tile")
-

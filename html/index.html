@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style type="text/css" media="all">
+
+    html {
+      background-color: #2c3e50; /* midnight blue */
+      font-family: "Avenir Next", "Helvetica Neue", "Arial", sans;
+    }
+
+    #main { float: left; display: inline-block; }
+    #sidebar { float: left; margin-left: 9px; }
+
+    .stats {
+      margin-top: 9px;
+      background-color: white;
+      height: 45px;
+      text-align: center;
+      font-size: 2em;
+    }
+
+    #game { position: relative }
+    #info {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      text-align: center;
+      line-height: 90px;
+      font-size: 2em;
+
+      position: absolute;
+      top: 200px;
+      height: 90px;
+      width: 331px;
+    }
+
+    .row {
+      height: 30px; display: 331px; clear: both;
+      border: none; margin: 0; padding: 0;
+    }
+
+    .row:last-child { border-bottom: solid 3px #e5e5e5; }
+
+    .cell {
+      border: solid 1px #e5e5e5;
+      border-width: 1px 1px 0px 0px;
+      background-color: white;
+      width: 29px; height: 29px; float: left;
+    }
+
+    .cell:first-child { border-left-width: 1px }
+
+    .o      { background-color: #e74c3c } /* alizarin */
+    .i      { background-color: #2980b9 } /* belize hole */
+    .t      { background-color: #8e44ad } /* wisteria */
+    .s      { background-color: #27ae60 } /* nephritis */
+    .z      { background-color: #16a085 } /* green sea */
+    .l      { background-color: #f1c40f } /* sun flower */
+    .j      { background-color: #e67e22 } /* carrot */
+
+  </style>
+</head>
+<body>
+  <div id="main"></div>
+  <div id="sidebar">
+    <div id="sidebar-next-tile"></div>
+    <div id="sidebar-stats"></div>
+  </div>
+  <script src="http://fb.me/react-0.12.1.js"></script>
+  <script type='text/javascript' src='main.js'></script>
+</body>
+
+</html>
+

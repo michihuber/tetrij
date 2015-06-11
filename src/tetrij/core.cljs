@@ -20,6 +20,9 @@
   ([width height] (vec (repeat height (empty-row width))))
   ([] (empty-board 11 22)))
 
+(defn board-width [board]
+  (-> board first count))
+
 (defn random-tile-type []
   (-> tiles keys rand-nth))
 
@@ -38,12 +41,11 @@
             (absolute-coords tile position)))
 
 (defn within-bounds? [board tile position]
-  (let [board-width (count (board 1))
-        board-height (count board)
+  (let [board-height (count board)
         tile-coords (absolute-coords tile position)
         x-coords (map #(nth % 0) tile-coords)
         y-coords (map #(nth % 1) tile-coords)
-        ok-x? (every? #(and ((not neg?) %) (< % board-width)) x-coords)
+        ok-x? (every? #(and ((not neg?) %) (< % (board-width board))) x-coords)
         ok-y? (every? #(< % board-height) y-coords)]
     (and ok-x? ok-y?)))
 
@@ -90,9 +92,6 @@
 
 (defn full-row? [row]
   (every? some? row))
-
-(defn board-width [board]
-  (count (board 0)))
 
 (defn cleared-board [board]
   (mapv #(if (full-row? %) (empty-row (board-width board)) %) board))

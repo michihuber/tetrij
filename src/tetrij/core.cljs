@@ -114,8 +114,24 @@
                    :tile-position initial-tile-position})))
 
 ;; event handling
+(defn keycode->event [code]
+  (case code
+    37 :move-left  ;; left arrow
+    39 :move-right ;; right arrow
+    69 :rotate-ccw ;; e
+    82 :rotate-cw  ;; r
+    38 :rotate-cw  ;; up arrow
+    40 :move-down  ;; down arrow
+    32 :drop-tile  ;; space
+    80 :pause
+    nil))
+
+(def keyevent->event (comp (map #(.-keyCode %))
+                           (map keycode->event)
+                           (remove nil?)))
+
 (def ticker (atom nil))
-(def user-chan (chan))
+(def user-chan (chan 1 keyevent->event))
 (def event-chan (chan (dropping-buffer 1)))
 (def pause-chan (chan))
 
@@ -133,19 +149,10 @@
 
 (set! (.-onkeydown js/document) #(put! user-chan %))
 (go-loop []
-  (let [key-code (.-keyCode (<! user-chan))
-        event (case key-code
-                37 :move-left  ;; left arrow
-                39 :move-right ;; right arrow
-                69 :rotate-ccw ;; e
-                82 :rotate-cw  ;; r
-                38 :rotate-cw  ;; up arrow
-                40 :move-down  ;; down arrow
-                32 :drop-tile  ;; space
-                80 (do (>! pause-chan :pause) ;; p
-                       nil)
-                nil)]
-    (if event (>! event-chan event))
+  (let [event (<! user-chan)]
+    (if (= :pause event)
+      (>! pause-chan event)
+      (>! event-chan event))
   (recur)))
 
 (def base-score [40 100 300 1200])

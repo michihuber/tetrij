@@ -183,11 +183,11 @@
 
         (set-level-speed (:level @game))))
     (let [{:keys [board tile tile-position]} @game]
-      (if (collides? board tile tile-position)
+      (if-not (collides? board tile tile-position)
+        (recur)
         (do
           (close! event-chan)
-          (swap! game assoc :game-over true))
-        (recur)))))
+          (swap! game assoc :game-over true))))))
 
 ;; rendering
 (defn render-to [component id]
@@ -204,9 +204,9 @@
   [:div#game
     (if game-over [:div#info "Game Over"])
     (if paused [:div#info "Paused"])
-    (if paused
-      (rendered-board (empty-board))
-      (rendered-board board-with-tile))]))
+    (if-not paused
+      (rendered-board board-with-tile)
+      (rendered-board (empty-board)))]))
 
 (defn next-tile-view []
   (let [empty-view (empty-board 5 5)
